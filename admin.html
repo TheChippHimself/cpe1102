@@ -40,6 +40,21 @@
             margin-bottom: 10px;
         }
 
+        .home-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .home-link:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         .tabs {
             display: flex;
             background: #f8f9fa;
@@ -130,11 +145,12 @@
         .btn-danger {
             background: #dc3545;
             color: white;
+            font-size: 13px;
+            padding: 8px 16px;
         }
 
-        .btn-success {
-            background: #28a745;
-            color: white;
+        .btn-danger:hover {
+            background: #c82333;
         }
 
         .data-table {
@@ -170,22 +186,16 @@
             font-weight: 500;
         }
 
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
         .alert-info {
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
 
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
         .stats-preview {
@@ -212,21 +222,6 @@
             text-align: center;
             padding: 20px;
             color: #666;
-        }
-
-        .home-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: #6c757d;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-        }
-
-        .home-link:hover {
-            background: #5a6268;
         }
     </style>
 </head>
@@ -341,27 +336,13 @@
         </div>
     </div>
 
-    
     <script>
-        // Simple password protection
-const ADMIN_PASSWORD = "bermil222";
-
-if (sessionStorage.getItem('admin_auth') !== 'true') {
-    const password = prompt('Enter admin password:');
-    if (password !== ADMIN_PASSWORD) {
-        alert('Incorrect password!');
-        window.location.href = 'index.html';
-    } else {
-        sessionStorage.setItem('admin_auth', 'true');
-    }
-}
         const API_BASE = '/api';
         let assignments = [];
         let payments = [];
         let nextAssignmentId = 1;
         let nextPaymentId = 1;
 
-        // Load data on page load
         window.onload = loadData;
 
         async function loadData() {
@@ -372,7 +353,6 @@ if (sessionStorage.getItem('admin_auth') !== 'true') {
                 assignments = data.assignments || [];
                 payments = data.payments || [];
                 
-                // Calculate next IDs
                 nextAssignmentId = assignments.length > 0 
                     ? Math.max(...assignments.map(a => a.id)) + 1 
                     : 1;
@@ -385,7 +365,7 @@ if (sessionStorage.getItem('admin_auth') !== 'true') {
                 updateStats();
             } catch (error) {
                 console.error('Error loading data:', error);
-                showAlert('Error loading data. Please refresh the page.', 'warning');
+                alert('⚠️ Error loading data. Please refresh the page.');
             }
         }
 
@@ -427,52 +407,6 @@ if (sessionStorage.getItem('admin_auth') !== 'true') {
                 });
                 
                 if (!response.ok) throw new Error('Failed to save');
-                updateStats();
-            } catch (error) {
-                console.error('Error saving payments:', error);
-                alert('❌ Failed to save payment. Please try again.');
-            }
-        }
-
-        function renderPayments() {
-            document.getElementById('payments-loading').style.display = 'none';
-            document.getElementById('payments-table').style.display = 'table';
-            
-            const tbody = document.getElementById('payments-tbody');
-            tbody.innerHTML = '';
-            
-            payments.forEach((pay) => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td><span style="background: linear-gradient(135deg, #4D6FFF, #3E8EF7); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">${pay.type}</span></td>
-                    <td>${pay.amount} pesos</td>
-                    <td style="font-weight: 600;">${pay.date}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deletePayment(${pay.id})">Delete</button>
-                    </td>
-                `;
-            });
-        }
-
-        async function deletePayment(id) {
-            if (confirm('Are you sure you want to delete this payment?')) {
-                payments = payments.filter(p => p.id !== id);
-                await savePayments();
-                renderPayments();
-            }
-        }
-
-        function updateStats() {
-            document.getElementById('stat-assignments').textContent = assignments.length;
-            document.getElementById('stat-payments').textContent = payments.length;
-            
-            const total = payments.reduce((sum, pay) => sum + pay.amount, 0);
-            document.getElementById('stat-total').textContent = '₱' + total;
-        }
-    </script>
-</body>
-</html> 
-            throw new Error('Failed to save');
                 updateStats();
             } catch (error) {
                 console.error('Error saving assignments:', error);
@@ -537,4 +471,49 @@ if (sessionStorage.getItem('admin_auth') !== 'true') {
                     body: JSON.stringify({ payments })
                 });
                 
-                if (!response.ok)
+                if (!response.ok) throw new Error('Failed to save');
+                updateStats();
+            } catch (error) {
+                console.error('Error saving payments:', error);
+                alert('❌ Failed to save payment. Please try again.');
+            }
+        }
+
+        function renderPayments() {
+            document.getElementById('payments-loading').style.display = 'none';
+            document.getElementById('payments-table').style.display = 'table';
+            
+            const tbody = document.getElementById('payments-tbody');
+            tbody.innerHTML = '';
+            
+            payments.forEach((pay) => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td><span style="background: linear-gradient(135deg, #4D6FFF, #3E8EF7); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">${pay.type}</span></td>
+                    <td>${pay.amount} pesos</td>
+                    <td style="font-weight: 600;">${pay.date}</td>
+                    <td>
+                        <button class="btn btn-danger" onclick="deletePayment(${pay.id})">Delete</button>
+                    </td>
+                `;
+            });
+        }
+
+        async function deletePayment(id) {
+            if (confirm('Are you sure you want to delete this payment?')) {
+                payments = payments.filter(p => p.id !== id);
+                await savePayments();
+                renderPayments();
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('stat-assignments').textContent = assignments.length;
+            document.getElementById('stat-payments').textContent = payments.length;
+            
+            const total = payments.reduce((sum, pay) => sum + pay.amount, 0);
+            document.getElementById('stat-total').textContent = '₱' + total;
+        }
+    </script>
+</body>
+</html>
