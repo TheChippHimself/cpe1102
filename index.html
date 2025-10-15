@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Engineering 1102 - BatStateU Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F4F7FE;
+            color: #1A237E;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #0A1A4F;
+            color: white;
+            padding: 24px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 24px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #2E4CB2, #4D6FFF);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(46, 76, 178, 0.3);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        .university-name {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            color: #B0C4FF;
+        }
+
+        .course-code {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4D6FFF;
+            margin-top: 4px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 12px;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            color: #B0C4FF;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(77, 111, 255, 0.15);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #2E4CB2, #4D6FFF);
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 76, 178, 0.3);
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 32px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content-header {
+            margin-bottom: 32px;
+        }
+
+        .content-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1A237E;
+            margin-bottom: 8px;
+        }
+
+        .content-header p {
+            color: #5C6BC0;
+            font-size: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(26, 35, 126, 0.12);
+        }
+
+        .stat-card.info {
+            border-left-color: #4D6FFF;
+        }
+
+        .stat-card.warning {
+            border-left-color: #7DA6FF;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #5C6BC0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-card.info .stat-icon {
+            background: rgba(77, 111, 255, 0.1);
+            color: #4D6FFF;
+        }
+
+        .stat-card.warning .stat-icon {
+            background: rgba(125, 166, 255, 0.1);
+            color: #7DA6FF;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1A237E;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #5C6BC0;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(26, 35, 126, 0.08);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #E8EAF6;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1A237E;
+        }
+
+        .card-action {
+            color: #2E4CB2;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .card-action:hover {
+            color: #4D6FFF;
+        }
+
+        .schedule-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .schedule-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #E8EAF6 0%, #C5CAE9 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #5C6BC0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background-color: #F4F7FE;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1A237E;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            border-top: 1px solid #E8EAF6;
+            font-size: 14px;
+            color: #5C6BC0;
+        }
+
+        tr {
+            transition: background-color 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background-color: #F4F7FE;
+        }
+
+        .course-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #4D6FFF, #3E8EF7);
+            color: white;
+        }
+
+        .due-date {
+            font-weight: 500;
+            color: #1A237E;
+        }
+
+        .orders-list {
+            list-style: none;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .order-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 6px;
+            top: 24px;
+            width: 2px;
+            height: calc(100% + 8px);
+            background: #E8EAF6;
+        }
+
+        .order-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 16px;
+            flex-shrink: 0;
+            margin-top: 4px;
+            position: relative;
+            z-index: 1;
+            background: #3E8EF7;
+        }
+
+        .order-content a {
+            font-weight: bold;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .order-content a:hover {
+            text-decoration: underline;
+        }
+
+        .order-content h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1A237E;
+            margin-bottom: 4px;
+        }
+
+        .order-content p {
+            font-size: 13px;
+            color: #5C6BC0;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #2E4CB2;
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 76, 178, 0.3);
+            font-size: 24px;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 24px 16px;
+                padding-top: 80px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-header h1 {
+                font-size: 24px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 26, 79, 0.5);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #2E4CB2, #4D6FFF);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(46, 76, 178, 0.4);
+            transition: all 0.3s ease;
+            z-index: 900;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(46, 76, 178, 0.5);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #5C6BC0;
+        }
+    </style>
+</head>
+<body>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <div class="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Admin Panel Link -->
+    <a href="admin.html" class="admin-link">⚙️ Admin Panel</a>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <div class="logo">
+                        <img src="favicon.png" alt="Logo" onerror="this.style.display='none'">
+                    </div>
+                    <div>
+                        <div class="university-name">Batangas State University<br>The NEU - Alangilan</div>
+                        <div class="course-code">CpE-1102</div>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#top" class="nav-link active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#schedules" class="nav-link">Schedules</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#assignments" class="nav-link">Assignments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#payments" class="nav-link">Payments</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header" id="top" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <h1>Computer Engineering 1102</h1>
+                    <p>Batangas State University - The National Engineering University - Alangilan Campus</p>
+                </div>
+                <div id="date-display" style="font-weight: bold; font-size: 16px; color: #2E4CB2;"></div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card info">
+                    <div class="stat-header">
+                        <div class="stat-title">Assignment Count</div>
+                        <div class="stat-icon">📚</div>
+                    </div>
+                    <div class="stat-value" id="assignment-count">-</div>
+                    <div class="stat-label">Active assignments</div>
+                </div>
+
+                <div class="stat-card warning">
+                    <div class="stat-header">
+                        <div class="stat-title">Due Payments</div>
+                        <div class="stat-icon">💳</div>
+                    </div>
+                    <div class="stat-value" id="payment-count">-</div>
+                    <div class="stat-label" id="payment-total">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Schedule Section -->
+                <div class="content-card" id="schedules">
+                    <div class="card-header">
+                        <h2 class="card-title">Class Schedule</h2>
+                        <a href="image.html" class="card-action">View Full →</a>
+                    </div>
+                    <div class="schedule-placeholder">
+                        <img src="images/sched ba.png" alt="Class Schedule" class="schedule-image" onerror="this.parentElement.innerHTML='<p>Schedule image not available</p>'">
+                    </div>
+                </div>
+
+                <!-- Follow Pages -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Follow these Pages</h2>
+                    </div>
+                    <ul class="orders-list">
+                        <li class="order-item">
+                            <div class="order-dot"></div>
+                            <div class="order-content">
+                               <a href="https://www.facebook.com/profile.php?id=61579721964406" target="_blank" rel="noopener noreferrer">CpE-1102 - BSU Alangilan Campus</a>
+                                <p>The Class Facebook Page</p>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="order-dot"></div>
+                            <div class="order-content">
+                               <a href="https://www.facebook.com/sscalangilan" target="_blank" rel="noopener noreferrer">Supreme Student Council - BatStateU Alangilan Campus</a>
+                                <p>The SSC's Facebook Page</p>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="order-dot"></div>
+                            <div class="order-content">
+                               <a href="https://www.facebook.com/CURSORBatStateU" target="_blank" rel="noopener noreferrer">Computer Engineering Students' Organization</a>
+                                <p>The CURSOR's Facebook Page</p>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="order-dot"></div>
+                            <div class="order-content">
+                               <a href="https://www.facebook.com/TheAXISPublications" target="_blank" rel="noopener noreferrer">The AXIS</a>
+                                <p>The School Publication's Facebook Page</p>
+                            </div>
+                        </li>
+                        <li class="order-item">
+                            <div class="order-dot"></div>
+                            <div class="order-content">
+                               <a href="https://www.facebook.com/BatStateUTheNEU" target="_blank" rel="noopener noreferrer">Batangas State University</a>
+                                <p>The Official University Page</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Assignments Table -->
+            <div class="content-card" id="assignments">
+                <div class="card-header">
+                    <h2 class="card-title">Active Assignments</h2>
+                </div>
+                <div class="table-container">
+                    <div id="assignments-loading" class="loading">Loading assignments...</div>
+                    <table id="assignments-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Title of Assignment</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assignments-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Payment Table -->
+            <div class="content-card" id="payments">
+                <div class="card-header">
+                    <h2 class="card-title">Upcoming Payments</h2>
+                </div>
+                <div class="table-container">
+                    <div id="payments-loading" class="loading">Loading payments...</div>
+                    <table id="payments-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Payment</th>
+                                <th>Price</th>
+                                <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+
+        // Load data from Netlify backend
+        async function loadDashboardData() {
+            try {
+                const response = await fetch(`${API_BASE}/get-data`);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                
+                const data = await response.json();
+                const assignments = data.assignments || [];
+                const payments = data.payments || [];
+
+                // Update stats
+                document.getElementById('assignment-count').textContent = assignments.length;
+                document.getElementById('payment-count').textContent = payments.length;
+                
+                const totalPayments = payments.reduce((sum, pay) => sum + pay.amount, 0);
+                document.getElementById('payment-total').textContent = totalPayments + ' pesos in total';
+
+                // Render assignments table
+                const assignmentsLoading = document.getElementById('assignments-loading');
+                const assignmentsTable = document.getElementById('assignments-table');
+                const assignmentsTbody = document.getElementById('assignments-tbody');
+                
+                assignmentsLoading.style.display = 'none';
+                assignmentsTable.style.display = 'table';
+                assignmentsTbody.innerHTML = '';
+                
+                if (assignments.length === 0) {
+                    const row = assignmentsTbody.insertRow();
+                    row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">No assignments yet</td>';
+                } else {
+                    assignments.forEach(assign => {
+                        const row = assignmentsTbody.insertRow();
+                        row.innerHTML = `
+                            <td><span class="course-tag">${assign.course}</span></td>
+                            <td>${assign.title}</td>
+                            <td class="due-date">${assign.date}</td>
+                        `;
+                    });
+                }
+
+                // Render payments table
+                const paymentsLoading = document.getElementById('payments-loading');
+                const paymentsTable = document.getElementById('payments-table');
+                const paymentsTbody = document.getElementById('payments-tbody');
+                
+                paymentsLoading.style.display = 'none';
+                paymentsTable.style.display = 'table';
+                paymentsTbody.innerHTML = '';
+                
+                if (payments.length === 0) {
+                    const row = paymentsTbody.insertRow();
+                    row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">No payments yet</td>';
+                } else {
+                    payments.forEach(pay => {
+                        const row = paymentsTbody.insertRow();
+                        row.innerHTML = `
+                            <td><span class="course-tag">${pay.type}</span></td>
+                            <td>${pay.amount} pesos</td>
+                            <td class="due-date">${pay.date}</td>
+                        `;
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('assignment-count').textContent = '!';
+                document.getElementById('payment-count').textContent = '!';
+                document.getElementById('payment-total').textContent = 'Failed to load data';
+                document.getElementById('assignments-loading').innerHTML = '<p style="color: #dc3545;">Error loading assignments</p>';
+                document.getElementById('payments-loading').innerHTML = '<p style="color: #dc3545;">Error loading payments</p>';
+            }
+        }
+
+        // Toggle mobile menu
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.overlay');
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        if (window.innerWidth <= 768) {
+                            toggleMenu();
+                        }
+                    }
+                }
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Display current date
+        const dateElement = document.getElementById('date-display');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+
+        // Load data when page loads
+        window.onload = loadDashboardData;
+
+        // Refresh data every 10 seconds to catch updates from admin panel
+        setInterval(loadDashboardData, 10000);
+    </script>
+</body>
+</html>
