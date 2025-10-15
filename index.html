@@ -490,9 +490,6 @@
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <div class="overlay" onclick="toggleMenu()"></div>
 
-    <!-- Admin Panel Link -->
-    <a href="admin.html" class="admin-link">⚙️ Admin Panel</a>
-
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -522,7 +519,7 @@
                         <a href="#payments" class="nav-link">Payments</a>
                     </li>
                     <li class="nav-item">
-                        <a href="admin.html" class="nav-link">Admin Panel</a>
+                        <a href="#exam" class="nav-link">Examinations</a>
                     </li>
                 </ul>
             </nav>
@@ -543,7 +540,6 @@
                 <div class="stat-card info">
                     <div class="stat-header">
                         <div class="stat-title">Assignment Count</div>
-                        <div class="stat-icon">📚</div>
                     </div>
                     <div class="stat-value" id="assignment-count">-</div>
                     <div class="stat-label">Active assignments</div>
@@ -552,7 +548,6 @@
                 <div class="stat-card warning">
                     <div class="stat-header">
                         <div class="stat-title">Due Payments</div>
-                        <div class="stat-icon">💳</div>
                     </div>
                     <div class="stat-value" id="payment-count">-</div>
                     <div class="stat-label" id="payment-total">Loading...</div>
@@ -651,6 +646,27 @@
                                 <th>Payment</th>
                                 <th>Price</th>
                                 <th>Due Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        <!-- Payment Table -->
+            <div class="content-card" id="exam">
+                <div class="card-header">
+                    <h2 class="card-title">Upcoming Examinations</h2>
+                </div>
+                <div class="table-container">
+                    <div id="payments-loading" class="loading">Loading exams...</div>
+                    <table id="payments-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Description</th>
+                                <th>Date of Exam</th>
                             </tr>
                         </thead>
                         <tbody id="payments-tbody">
