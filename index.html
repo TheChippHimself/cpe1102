@@ -829,36 +829,17 @@
             });
         });
 
-   // Display current date and time for Philippines
-        function updateDateTime() {
-            const dateElement = document.getElementById('date-display');
-            const now = new Date();
-            
-            const dateOptions = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                timeZone: 'Asia/Manila'
-            };
-            
-            const timeOptions = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZone: 'Asia/Manila',
-                hour12: true
-            };
-            
-            const dateStr = now.toLocaleDateString('en-US', dateOptions);
-            const timeStr = now.toLocaleTimeString('en-US', timeOptions);
-            
-            dateElement.innerHTML = `<div style="font-weight: bold; text-align: right;">${dateStr}</div><div style="font-weight: normal; text-align: right;">${timeStr}</div>`;
-        }
-        
-        // Update immediately and then every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
+        // Display current date
+        const dateElement = document.getElementById('date-display');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+
+        // Load data when page loads
+        window.onload = loadDashboardData;
+
+        // Refresh data every 10 seconds to catch updates from admin panel
+        setInterval(loadDashboardData, 10000);
     </script>
 </body>
 </html>
