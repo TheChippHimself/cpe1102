@@ -228,7 +228,7 @@
 <body>
     <div id="password-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999;">
         <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;">
-            <h2 style="color: #2E4CB2; margin-bottom: 20px;">🔒 Admin Access</h2>
+            <h2 style="color: #2E4CB2; margin-bottom: 20px;">Admin Access</h2>
             <p style="color: #666; margin-bottom: 20px;">Enter password to continue</p>
             <input type="password" id="password-input" placeholder="Enter password" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
             <button onclick="checkPassword()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #2E4CB2, #4D6FFF); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Access Admin Panel</button>
@@ -390,7 +390,7 @@
                 updateStats();
             } catch (error) {
                 console.error('Error loading data:', error);
-                alert('⚠️ Error loading data. Please refresh the page.');
+                alert('Error loading data. Please refresh the page.');
             }
         }
 
@@ -420,7 +420,7 @@
             await saveAssignments();
             renderAssignments();
             this.reset();
-            alert('✅ Assignment added successfully!');
+            alert('Assignment added successfully!');
         });
 
         async function saveAssignments() {
@@ -435,7 +435,7 @@
                 updateStats();
             } catch (error) {
                 console.error('Error saving assignments:', error);
-                alert('❌ Failed to save assignment. Please try again.');
+                alert('Failed to save assignment. Please try again.');
             }
         }
 
@@ -485,7 +485,7 @@
             await savePayments();
             renderPayments();
             this.reset();
-            alert('✅ Payment added successfully!');
+            alert('Payment added successfully!');
         });
 
         async function savePayments() {
@@ -500,7 +500,7 @@
                 updateStats();
             } catch (error) {
                 console.error('Error saving payments:', error);
-                alert('❌ Failed to save payment. Please try again.');
+                alert('Failed to save payment. Please try again.');
             }
         }
 
