@@ -170,6 +170,10 @@
             border-left-color: #7DA6FF;
         }
 
+        .stat-card.success {
+            border-left-color: #4CAF50;
+        }
+
         .stat-header {
             display: flex;
             justify-content: space-between;
@@ -203,6 +207,11 @@
         .stat-card.warning .stat-icon {
             background: rgba(125, 166, 255, 0.1);
             color: #7DA6FF;
+        }
+
+        .stat-card.success .stat-icon {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
         }
 
         .stat-value {
@@ -519,7 +528,7 @@
                         <a href="#payments" class="nav-link">Payments</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#exam" class="nav-link">Examinations</a>
+                        <a href="#examinations" class="nav-link">Examinations</a>
                     </li>
                 </ul>
             </nav>
@@ -551,6 +560,14 @@
                     </div>
                     <div class="stat-value" id="payment-count">-</div>
                     <div class="stat-label" id="payment-total">Loading...</div>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-header">
+                        <div class="stat-title">Upcoming Exams</div>
+                    </div>
+                    <div class="stat-value" id="exam-count">-</div>
+                    <div class="stat-label">Examinations scheduled</div>
                 </div>
             </div>
 
@@ -633,7 +650,7 @@
                 </div>
             </div>
 
-            <!-- Payment Table -->
+            <!-- Payments Table -->
             <div class="content-card" id="payments">
                 <div class="card-header">
                     <h2 class="card-title">Upcoming Payments</h2>
@@ -654,14 +671,14 @@
                 </div>
             </div>
 
-        <!-- Payment Table -->
-            <div class="content-card" id="exam">
+            <!-- Examinations Table -->
+            <div class="content-card" id="examinations">
                 <div class="card-header">
                     <h2 class="card-title">Upcoming Examinations</h2>
                 </div>
                 <div class="table-container">
-                    <div id="payments-loading" class="loading">Loading exams...</div>
-                    <table id="payments-table" style="display: none;">
+                    <div id="examinations-loading" class="loading">Loading examinations...</div>
+                    <table id="examinations-table" style="display: none;">
                         <thead>
                             <tr>
                                 <th>Course</th>
@@ -669,7 +686,7 @@
                                 <th>Date of Exam</th>
                             </tr>
                         </thead>
-                        <tbody id="payments-tbody">
+                        <tbody id="examinations-tbody">
                         </tbody>
                     </table>
                 </div>
@@ -692,10 +709,12 @@
                 const data = await response.json();
                 const assignments = data.assignments || [];
                 const payments = data.payments || [];
+                const examinations = data.examinations || [];
 
                 // Update stats
                 document.getElementById('assignment-count').textContent = assignments.length;
                 document.getElementById('payment-count').textContent = payments.length;
+                document.getElementById('exam-count').textContent = examinations.length;
                 
                 const totalPayments = payments.reduce((sum, pay) => sum + pay.amount, 0);
                 document.getElementById('payment-total').textContent = totalPayments + ' pesos in total';
@@ -745,13 +764,38 @@
                         `;
                     });
                 }
+
+                // Render examinations table
+                const examinationsLoading = document.getElementById('examinations-loading');
+                const examinationsTable = document.getElementById('examinations-table');
+                const examinationsTbody = document.getElementById('examinations-tbody');
+                
+                examinationsLoading.style.display = 'none';
+                examinationsTable.style.display = 'table';
+                examinationsTbody.innerHTML = '';
+                
+                if (examinations.length === 0) {
+                    const row = examinationsTbody.insertRow();
+                    row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">No examinations scheduled yet</td>';
+                } else {
+                    examinations.forEach(exam => {
+                        const row = examinationsTbody.insertRow();
+                        row.innerHTML = `
+                            <td><span class="course-tag">${exam.course}</span></td>
+                            <td>${exam.description}</td>
+                            <td class="due-date">${exam.date}</td>
+                        `;
+                    });
+                }
             } catch (error) {
                 console.error('Error loading data:', error);
                 document.getElementById('assignment-count').textContent = '!';
                 document.getElementById('payment-count').textContent = '!';
+                document.getElementById('exam-count').textContent = '!';
                 document.getElementById('payment-total').textContent = 'Failed to load data';
                 document.getElementById('assignments-loading').innerHTML = '<p style="color: #dc3545;">Error loading assignments</p>';
                 document.getElementById('payments-loading').innerHTML = '<p style="color: #dc3545;">Error loading payments</p>';
+                document.getElementById('examinations-loading').innerHTML = '<p style="color: #dc3545;">Error loading examinations</p>';
             }
         }
 
