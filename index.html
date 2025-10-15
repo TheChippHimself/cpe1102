@@ -853,12 +853,8 @@
             const dateStr = now.toLocaleDateString('en-US', dateOptions);
             const timeStr = now.toLocaleTimeString('en-US', timeOptions);
             
-            dateElement.innerHTML = `<div style="font-weight: bold;">${dateStr}</div><div>${timeStr}</div>`;
+            dateElement.innerHTML = `<div style="font-weight: bold; text-align: right;">${dateStr}</div><div style="font-weight: normal; text-align: right;">${timeStr}</div>`;
         }
-        
-        // Update immediately and then every second
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
         
         // Update immediately and then every second
         updateDateTime();
