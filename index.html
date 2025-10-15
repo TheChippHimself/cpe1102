@@ -829,23 +829,36 @@
             });
         });
 
-         // Display current date and time for Philippines
+        // Display current date and time for Philippines
         function updateDateTime() {
             const dateElement = document.getElementById('date-display');
-            const options = { 
+            const now = new Date();
+            
+            const dateOptions = { 
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
                 day: 'numeric',
+                timeZone: 'Asia/Manila'
+            };
+            
+            const timeOptions = {
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
                 timeZone: 'Asia/Manila',
                 hour12: true
             };
-            const now = new Date();
-            dateElement.textContent = now.toLocaleString('en-US', options);
+            
+            const dateStr = now.toLocaleDateString('en-US', dateOptions);
+            const timeStr = now.toLocaleTimeString('en-US', timeOptions);
+            
+            dateElement.innerHTML = `<div style="font-weight: bold;">${dateStr}</div><div>${timeStr}</div>`;
         }
+        
+        // Update immediately and then every second
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
         
         // Update immediately and then every second
         updateDateTime();
