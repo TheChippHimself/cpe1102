@@ -226,7 +226,17 @@
     </style>
 </head>
 <body>
-    <div class="admin-container">
+    <div id="password-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;">
+            <h2 style="color: #2E4CB2; margin-bottom: 20px;">🔒 Admin Access</h2>
+            <p style="color: #666; margin-bottom: 20px;">Enter password to continue</p>
+            <input type="password" id="password-input" placeholder="Enter password" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; margin-bottom: 15px;">
+            <button onclick="checkPassword()" style="width: 100%; padding: 12px; background: linear-gradient(135deg, #2E4CB2, #4D6FFF); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">Access Admin Panel</button>
+            <p id="error-message" style="color: #dc3545; margin-top: 10px; display: none;">Incorrect password</p>
+        </div>
+    </div>
+
+    <div class="admin-container" id="admin-content" style="display: none;">
         <div class="admin-header">
             <h1>🎓 Admin Control Panel</h1>
             <p>Manage CpE-1102 Dashboard Content</p>
@@ -234,16 +244,16 @@
         </div>
 
         <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('assignments')">📚 Assignments</button>
-            <button class="tab-button" onclick="switchTab('payments')">💳 Payments</button>
-            <button class="tab-button" onclick="switchTab('stats')">📊 Statistics</button>
+            <button class="tab-button active" onclick="switchTab('assignments')"> Assignments</button>
+            <button class="tab-button" onclick="switchTab('payments')"> Payments</button>
+            <button class="tab-button" onclick="switchTab('stats')"> Statistics</button>
         </div>
 
         <!-- Assignments Tab -->
         <div id="assignments-tab" class="tab-content active">
             <div class="section-title">Add New Assignment</div>
             <div class="alert alert-info">
-                📌 The assignment count will automatically update on the dashboard.
+                 The assignment count will automatically update on the dashboard.
             </div>
             <form id="assignment-form">
                 <div class="form-group">
@@ -280,7 +290,7 @@
         <div id="payments-tab" class="tab-content">
             <div class="section-title">Add New Payment</div>
             <div class="alert alert-info">
-                💰 The payment count and total will automatically update on the dashboard.
+                 The payment count and total will automatically update on the dashboard.
             </div>
             <form id="payment-form">
                 <div class="form-group">
@@ -317,7 +327,7 @@
         <div id="stats-tab" class="tab-content">
             <div class="section-title">Dashboard Statistics</div>
             <div class="alert alert-success">
-                ✅ Statistics are automatically calculated from your data.
+                 Statistics are automatically calculated from your data.
             </div>
             <div class="stats-preview">
                 <div class="stat-preview-card">
@@ -343,7 +353,22 @@
         let nextAssignmentId = 1;
         let nextPaymentId = 1;
 
-        window.onload = loadData;
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            if (password === 'bermil222') {
+                document.getElementById('password-overlay').style.display = 'none';
+                document.getElementById('admin-content').style.display = 'block';
+                loadData();
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
 
         async function loadData() {
             try {
