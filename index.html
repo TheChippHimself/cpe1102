@@ -20,8 +20,65 @@
             background-color: #F4F7FE;
             color: #1A237E;
             overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
+        body.dark-mode {
+            background-color: #0F1419;
+            color: #E8EAF6;
+        }
+
+        body.dark-mode .sidebar {
+            background-color: #1A1F2E;
+        }
+
+        body.dark-mode .content-header h1,
+        body.dark-mode .stat-value,
+        body.dark-mode .card-title,
+        body.dark-mode th,
+        body.dark-mode .order-content h4,
+        body.dark-mode .due-date {
+            color: #E8EAF6;
+        }
+
+        body.dark-mode .content-header p,
+        body.dark-mode .stat-label,
+        body.dark-mode .stat-title,
+        body.dark-mode td,
+        body.dark-mode .order-content p {
+            color: #B0C4FF;
+        }
+
+        body.dark-mode .stat-card,
+        body.dark-mode .content-card {
+            background-color: #1E2532;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode thead {
+            background-color: #151A26;
+        }
+
+        body.dark-mode td {
+            border-top-color: #2A3142;
+        }
+
+        body.dark-mode tbody tr:hover {
+            background-color: #252B3A;
+        }
+
+        body.dark-mode .card-header {
+            border-bottom-color: #2A3142;
+        }
+
+        body.dark-mode .schedule-placeholder {
+            background: linear-gradient(135deg, #2A3142 0%, #1E2532 100%);
+        }
+
+        body.dark-mode .order-item:not(:last-child)::after {
+            background: #2A3142;
+        }
+        
         .dashboard-container {
             display: flex;
             min-height: 100vh;
@@ -35,7 +92,7 @@
             position: fixed;
             height: 100vh;
             overflow-y: auto;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             z-index: 1000;
         }
 
@@ -134,11 +191,13 @@
             font-weight: 700;
             color: #1A237E;
             margin-bottom: 8px;
+            transition: color 0.3s ease;
         }
 
         .content-header p {
             color: #5C6BC0;
             font-size: 15px;
+            transition: color 0.3s ease;
         }
 
         .stats-grid {
@@ -187,6 +246,7 @@
             color: #5C6BC0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: color 0.3s ease;
         }
 
         .stat-icon {
@@ -219,11 +279,13 @@
             font-weight: 700;
             color: #1A237E;
             margin-bottom: 4px;
+            transition: color 0.3s ease;
         }
 
         .stat-label {
             font-size: 14px;
             color: #5C6BC0;
+            transition: color 0.3s ease;
         }
 
         .content-grid {
@@ -238,6 +300,7 @@
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 4px 16px rgba(26, 35, 126, 0.08);
+            transition: all 0.3s ease;
         }
 
         .card-header {
@@ -247,12 +310,14 @@
             margin-bottom: 20px;
             padding-bottom: 16px;
             border-bottom: 1px solid #E8EAF6;
+            transition: border-color 0.3s ease;
         }
 
         .card-title {
             font-size: 20px;
             font-weight: 700;
             color: #1A237E;
+            transition: color 0.3s ease;
         }
 
         .card-action {
@@ -285,6 +350,7 @@
             color: #5C6BC0;
             font-size: 18px;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .table-container {
@@ -298,6 +364,7 @@
 
         thead {
             background-color: #F4F7FE;
+            transition: background-color 0.3s ease;
         }
 
         th {
@@ -308,6 +375,7 @@
             color: #1A237E;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            transition: color 0.3s ease;
         }
 
         td {
@@ -315,6 +383,7 @@
             border-top: 1px solid #E8EAF6;
             font-size: 14px;
             color: #5C6BC0;
+            transition: all 0.3s ease;
         }
 
         tr {
@@ -338,6 +407,7 @@
         .due-date {
             font-weight: 500;
             color: #1A237E;
+            transition: color 0.3s ease;
         }
 
         .orders-list {
@@ -359,6 +429,7 @@
             width: 2px;
             height: calc(100% + 8px);
             background: #E8EAF6;
+            transition: background-color 0.3s ease;
         }
 
         .order-dot {
@@ -388,11 +459,13 @@
             font-weight: 600;
             color: #1A237E;
             margin-bottom: 4px;
+            transition: color 0.3s ease;
         }
 
         .order-content p {
             font-size: 13px;
             color: #5C6BC0;
+            transition: color 0.3s ease;
         }
 
         .menu-toggle {
@@ -412,6 +485,172 @@
             font-size: 24px;
         }
 
+        .settings-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: linear-gradient(135deg, #2E4CB2, #4D6FFF);
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(46, 76, 178, 0.3);
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .settings-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(46, 76, 178, 0.4);
+        }
+
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 26, 79, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .settings-modal.active {
+            display: flex;
+        }
+
+        .settings-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        body.dark-mode .settings-content {
+            background: #1E2532;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #E8EAF6;
+        }
+
+        body.dark-mode .settings-header {
+            border-bottom-color: #2A3142;
+        }
+
+        .settings-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1A237E;
+        }
+
+        body.dark-mode .settings-header h2 {
+            color: #E8EAF6;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #5C6BC0;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover {
+            color: #1A237E;
+        }
+
+        body.dark-mode .close-button {
+            color: #B0C4FF;
+        }
+
+        body.dark-mode .close-button:hover {
+            color: #E8EAF6;
+        }
+
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .settings-option-info h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1A237E;
+            margin-bottom: 4px;
+        }
+
+        body.dark-mode .settings-option-info h3 {
+            color: #E8EAF6;
+        }
+
+        .settings-option-info p {
+            font-size: 14px;
+            color: #5C6BC0;
+        }
+
+        body.dark-mode .settings-option-info p {
+            color: #B0C4FF;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 32px;
+            background: #E8EAF6;
+            border-radius: 32px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #2E4CB2, #4D6FFF);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(28px);
+        }
+
         @media (max-width: 1024px) {
             .content-grid {
                 grid-template-columns: 1fr;
@@ -421,6 +660,11 @@
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
+            }
+
+            .settings-button {
+                top: 20px;
+                right: 80px;
             }
 
             .sidebar {
@@ -447,6 +691,10 @@
 
             .stat-value {
                 font-size: 28px;
+            }
+
+            .settings-content {
+                padding: 24px;
             }
         }
 
@@ -497,7 +745,27 @@
 </head>
 <body>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <button class="settings-button" onclick="toggleSettings()">⚙️</button>
     <div class="overlay" onclick="toggleMenu()"></div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal" onclick="closeSettingsOnOverlay(event)">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2>Settings</h2>
+                <button class="close-button" onclick="toggleSettings()">×</button>
+            </div>
+            <div class="settings-option">
+                <div class="settings-option-info">
+                    <h3>Dark Mode</h3>
+                    <p>Switch between light and dark theme</p>
+                </div>
+                <div class="toggle-switch" id="darkModeToggle" onclick="toggleDarkMode()">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -571,8 +839,6 @@
                 </div>
             </div>
 
-            
-
             <!-- Assignments Table -->
             <div class="content-card" id="assignments">
                 <div class="card-header">
@@ -635,6 +901,7 @@
                     </table>
                 </div>
             </div>
+
             <!-- Content Grid -->
             <div class="content-grid">
                 <!-- Schedule Section -->
@@ -694,11 +961,42 @@
             </div>
         </main>
     </div>
-    <a href="admin.html" class="admin-link">
-    Admin Panel
-</a>
+    <a href="admin.html" class="admin-link">Admin Panel</a>
+    
     <script>
         const API_BASE = '/api';
+
+        // Dark Mode Functions
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('darkModeToggle');
+            
+            body.classList.toggle('dark-mode');
+            toggle.classList.toggle('active');
+            
+            // Save preference
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        }
+
+        function loadDarkModePreference() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeToggle').classList.add('active');
+            }
+        }
+
+        function toggleSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.toggle('active');
+        }
+
+        function closeSettingsOnOverlay(event) {
+            if (event.target.id === 'settingsModal') {
+                toggleSettings();
+            }
+        }
 
         // Load data from Netlify backend
         async function loadDashboardData() {
@@ -836,8 +1134,11 @@
         const today = new Date();
         dateElement.textContent = today.toLocaleDateString('en-US', options);
 
-        // Load data when page loads
-        window.onload = loadDashboardData;
+        // Initialize on page load
+        window.onload = function() {
+            loadDarkModePreference();
+            loadDashboardData();
+        };
 
         // Refresh data every 10 seconds to catch updates from admin panel
         setInterval(loadDashboardData, 10000);
