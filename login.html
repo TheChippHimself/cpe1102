@@ -18,8 +18,7 @@
 
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, rgba(10, 26, 79, 0.8) 0%, rgba(46, 76, 178, 0.8) 100%), 
-                        url('images/wow.png') center/cover no-repeat fixed;
+            background: linear-gradient(135deg, #0A1A4F 0%, #2E4CB2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -318,7 +317,7 @@
                     <img src="favicon.png" alt="Logo" onerror="this.style.display='none'">
                 </div>
             </div>
-            <h1>CpE-1102 Official Website</h1>
+            <h1>CpE-1102 Dashboard</h1>
             <p>Batangas State University - Alangilan</p>
         </div>
         <div class="login-body">
@@ -446,6 +445,8 @@
     </div>
 
     <script>
+        const API_BASE = '/api';
+
         const VALID_EMAILS = [
             '25-08292@g.batstate-u.edu.ph',
             '25-04599@g.batstate-u.edu.ph',
@@ -498,28 +499,41 @@
             return email.split('@')[0];
         }
 
-        function getUserPasswords() {
-            const stored = localStorage.getItem('userPasswords');
-            return stored ? JSON.parse(stored) : {};
+        async function getPassword(email) {
+            try {
+                const response = await fetch(`${API_BASE}/get-password?email=${encodeURIComponent(email)}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.password || getSRCode(email);
+                }
+            } catch (error) {
+                console.error('Error fetching password:', error);
+            }
+            return getSRCode(email);
         }
 
-        function setUserPassword(email, password) {
-            const passwords = getUserPasswords();
-            passwords[email] = password;
-            localStorage.setItem('userPasswords', JSON.stringify(passwords));
+        async function setPassword(email, password) {
+            try {
+                const response = await fetch(`${API_BASE}/set-password`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                return response.ok;
+            } catch (error) {
+                console.error('Error setting password:', error);
+                return false;
+            }
         }
 
-        function getPassword(email) {
-            const passwords = getUserPasswords();
-            return passwords[email] || getSRCode(email);
-        }
-
-        function validateLogin(email, password) {
+        async function validateLogin(email, password) {
             if (!VALID_EMAILS.includes(email.toLowerCase())) {
                 return { success: false, message: 'Invalid email address. Please use your BatStateU email.' };
             }
 
-            const correctPassword = getPassword(email.toLowerCase());
+            const correctPassword = await getPassword(email.toLowerCase());
             if (password !== correctPassword) {
                 return { success: false, message: 'Incorrect password. Please try again.' };
             }
@@ -571,7 +585,7 @@
             document.getElementById('modalSuccessMessage').classList.remove('show');
         }
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('email').value.toLowerCase().trim();
@@ -581,22 +595,20 @@
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
             
-            setTimeout(() => {
-                const result = validateLogin(email, password);
-                
-                if (result.success) {
-                    sessionStorage.setItem('authenticated', 'true');
-                    sessionStorage.setItem('userEmail', email);
-                    window.location.href = 'index.html';
-                } else {
-                    showError(result.message);
-                    button.disabled = false;
-                    button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
-                }
-            }, 500);
+            const result = await validateLogin(email, password);
+            
+            if (result.success) {
+                sessionStorage.setItem('authenticated', 'true');
+                sessionStorage.setItem('userEmail', email);
+                window.location.href = 'index.html';
+            } else {
+                showError(result.message);
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In';
+            }
         });
 
-        document.getElementById('changePasswordForm').addEventListener('submit', function(e) {
+        document.getElementById('changePasswordForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const email = document.getElementById('changeEmail').value.toLowerCase().trim();
@@ -610,7 +622,8 @@
                 return;
             }
             
-            if (currentPassword !== getPassword(email)) {
+            const correctPassword = await getPassword(email);
+            if (currentPassword !== correctPassword) {
                 showError('Current password is incorrect.', 'modalErrorMessage');
                 return;
             }
@@ -628,8 +641,9 @@
             button.disabled = true;
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing...';
             
-            setTimeout(() => {
-                setUserPassword(email, newPassword);
+            const success = await setPassword(email, newPassword);
+            
+            if (success) {
                 showSuccess('Password changed successfully! You can now login with your new password.');
                 button.disabled = false;
                 button.innerHTML = '<i class="fas fa-key"></i> Change Password';
@@ -637,7 +651,11 @@
                 setTimeout(() => {
                     closeChangePasswordModal();
                 }, 2000);
-            }, 500);
+            } else {
+                showError('Failed to change password. Please try again.', 'modalErrorMessage');
+                button.disabled = false;
+                button.innerHTML = '<i class="fas fa-key"></i> Change Password';
+            }
         });
 
         window.onclick = function(event) {
