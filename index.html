@@ -744,23 +744,6 @@
         }
     </style>
 </head>
-<script>
-// Authentication check - must be at the top of the page
-(function() {
-    if (sessionStorage.getItem('authenticated') !== 'true') {
-        window.location.href = 'login.html';
-    }
-})();
-
-// Logout function
-function logout() {
-    if (confirm('Are you sure you want to logout?')) {
-        sessionStorage.removeItem('authenticated');
-        sessionStorage.removeItem('userEmail');
-        window.location.href = 'login.html';
-    }
-}
-</script>
 <body>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     <button class="settings-button" onclick="toggleSettings()">
@@ -984,16 +967,8 @@ function logout() {
         </main>
     </div>
     <a href="admin.html" class="admin-link">Admin Panel</a>
-    <button class="settings-button" onclick="toggleSettings()" style="right: 80px;">
-    <i class="fas fa-cog"></i>
-</button>
-<button class="settings-button" onclick="logout()" style="right: 20px; background: linear-gradient(135deg, #C62828, #E53935);">
-    <i class="fas fa-sign-out-alt"></i>
-</button>
     
     <script>
-
-        
         const API_BASE = '/api';
 
         // Dark Mode Functions

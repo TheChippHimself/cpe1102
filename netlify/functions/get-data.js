@@ -80,15 +80,16 @@ export default async (req, context) => {
           }
         ],
         examinations: [],
-        passwords: {}, // Add this line
+        passwords: {},
         lastUpdated: new Date().toISOString()
       };
       await store.setJSON('data', data);
     }
 
-    // Ensure passwords object exists for older data
+    // Ensure passwords object exists
     if (!data.passwords) {
       data.passwords = {};
+      await store.setJSON('data', data);
     }
     
     return new Response(JSON.stringify(data), {
@@ -100,10 +101,7 @@ export default async (req, context) => {
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+      headers: { 'Content-Type': 'application/json' }
     });
   }
 };
