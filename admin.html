@@ -259,7 +259,18 @@
             <form id="assignment-form">
                 <div class="form-group">
                     <label>Course</label>
-                    <input type="text" id="assign-course" placeholder="e.g., CHEM 101" required>
+                    <select id="assign-course" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; cursor: pointer;">
+                        <option value="">Select a course...</option>
+                        <option value="CpE 101">CpE 101</option>
+                        <option value="CWTS">CWTS</option>
+                        <option value="PATHFit">PATHFit</option>
+                        <option value="Art App">Art App</option>
+                        <option value="RPH">RPH</option>
+                        <option value="CHEM 101">CHEM 101</option>
+                        <option value="MATH 101">MATH 101</option>
+                        <option value="ENGG 101">ENGG 101</option>
+                        <option value="TCW">TCW</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Assignment Title</label>
@@ -267,7 +278,7 @@
                 </div>
                 <div class="form-group">
                     <label>Due Date</label>
-                    <input type="text" id="assign-date" placeholder="e.g., October 20, 2025" required>
+                    <input type="date" id="assign-date" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Assignment</button>
             </form>
