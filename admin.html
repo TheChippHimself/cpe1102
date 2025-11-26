@@ -344,15 +344,26 @@
             <form id="examination-form">
                 <div class="form-group">
                     <label>Course</label>
-                    <input type="text" id="exam-course" placeholder="e.g., MATH 101" required>
+                    <select id="assign-course" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; cursor: pointer;">
+                        <option value="">Select a course...</option>
+                        <option value="CpE 101">CpE 101</option>
+                        <option value="CWTS">CWTS</option>
+                        <option value="PATHFit">PATHFit</option>
+                        <option value="Art App">Art App</option>
+                        <option value="RPH">RPH</option>
+                        <option value="CHEM 101">CHEM 101</option>
+                        <option value="MATH 101">MATH 101</option>
+                        <option value="ENGG 101">ENGG 101</option>
+                        <option value="TCW">TCW</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Description</label>
-                    <input type="text" id="exam-description" placeholder="e.g., Midterm Examination" required>
+                    <input type="text" id="assign-title" placeholder="Enter examination description" required>
                 </div>
                 <div class="form-group">
                     <label>Date of Exam</label>
-                    <input type="text" id="exam-date" placeholder="e.g., November 15, 2025" required>
+                    <input type="date" id="assign-date" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add Examination</button>
             </form>
