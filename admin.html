@@ -609,78 +609,69 @@
         }
 
         // Examinations
-        document.getElementById('examination-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const course = document.getElementById('exam-course').value;
-            const description = document.getElementById('exam-description').value;
-            const date = document.getElementById('exam-date').value;
-            
-            examinations.push({
-                id: nextExaminationId++,
-                course,
-                description,
-                date
-            });
-            
-            await saveExaminations();
-            renderExaminations();
-            this.reset();
-            alert('Examination added successfully!');
+document.getElementById('examination-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const course = document.getElementById('exam-course').value;
+    const title = document.getElementById('exam-title').value;   // ✅ FIXED
+    const date = document.getElementById('exam-date').value;
+
+    examinations.push({
+        id: nextExaminationId++,
+        course,
+        title,        // ✅ FIXED (was description)
+        date
+    });
+    
+    await saveExaminations();
+    renderExaminations();
+    this.reset();
+    alert('Examination added successfully!');
+});
+
+async function saveExaminations() {
+    try {
+        const response = await fetch(`${API_BASE}/update-examinations`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ examinations })
         });
+        
+        if (!response.ok) throw new Error('Failed to save');
+        updateStats();
+    } catch (error) {
+        console.error('Error saving examinations:', error);
+        alert('Failed to save examination. Please try again.');
+    }
+}
 
-        async function saveExaminations() {
-            try {
-                const response = await fetch(`${API_BASE}/update-examinations`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ examinations })
-                });
-                
-                if (!response.ok) throw new Error('Failed to save');
-                updateStats();
-            } catch (error) {
-                console.error('Error saving examinations:', error);
-                alert('Failed to save examination. Please try again.');
-            }
-        }
+function renderExaminations() {
+    document.getElementById('examinations-loading').style.display = 'none';
+    document.getElementById('examinations-table').style.display = 'table';
+    
+    const tbody = document.getElementById('examinations-tbody');
+    tbody.innerHTML = '';
+    
+    examinations.forEach((exam) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td><span style="background: linear-gradient(135deg, #4D6FFF, #3E8EF7); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">${exam.course}</span></td>
+            <td>${exam.title}</td>       <!-- ✅ FIXED -->
+            <td style="font-weight: 600;">${exam.date}</td>
+            <td>
+                <button class="btn btn-danger" onclick="deleteExamination(${exam.id})">Delete</button>
+            </td>
+        `;
+    });
+}
 
-        function renderExaminations() {
-            document.getElementById('examinations-loading').style.display = 'none';
-            document.getElementById('examinations-table').style.display = 'table';
-            
-            const tbody = document.getElementById('examinations-tbody');
-            tbody.innerHTML = '';
-            
-            examinations.forEach((exam) => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td><span style="background: linear-gradient(135deg, #4D6FFF, #3E8EF7); color: white; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;">${exam.course}</span></td>
-                    <td>${exam.description}</td>
-                    <td style="font-weight: 600;">${exam.date}</td>
-                    <td>
-                        <button class="btn btn-danger" onclick="deleteExamination(${exam.id})">Delete</button>
-                    </td>
-                `;
-            });
-        }
-
-        async function deleteExamination(id) {
-            if (confirm('Are you sure you want to delete this examination?')) {
-                examinations = examinations.filter(e => e.id !== id);
-                await saveExaminations();
-                renderExaminations();
-            }
-        }
-
-        function updateStats() {
-            document.getElementById('stat-assignments').textContent = assignments.length;
-            document.getElementById('stat-payments').textContent = payments.length;
-            document.getElementById('stat-examinations').textContent = examinations.length;
-            
-            const total = payments.reduce((sum, pay) => sum + pay.amount, 0);
-            document.getElementById('stat-total').textContent = '₱' + total;
-        }
+async function deleteExamination(id) {
+    if (confirm('Are you sure you want to delete this examination?')) {
+        examinations = examinations.filter(e => e.id !== id);
+        await saveExaminations();
+        renderExaminations();
+    }
+}
     </script>
 </body>
 </html>
